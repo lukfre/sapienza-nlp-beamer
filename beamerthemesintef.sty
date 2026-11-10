@@ -61,11 +61,13 @@
 % 1 = as large as in the Google Slides layout. Change with \cornerscale{0.85}
 \newcommand{\@cornerscale}{0.7}
 \newcommand{\cornerscale}[1]{\renewcommand{\@cornerscale}{#1}}
+% Extra factor applied on top of \@cornerscale (ToC and backmatter slides use 1.5)
+\newcommand{\@cornerfactor}{1}
 % The decorations are full-page PDFs; scaling them about the page corner
 % shrinks only the triangle, which stays anchored to that corner.
 \newcommand{\@decorframe}{\iftoggle{corners}{\iftoggle{slidecorner}{%
-  \vbox to\paperheight{\vfill\hbox to\paperwidth{\hfill
-    \includegraphics[width=\@cornerscale\paperwidth]{assets/decor_frame}}}}{}}{}}
+  \vbox to\paperheight{\vss\hbox to\paperwidth{\hss
+    \includegraphics[width=\@cornerfactor\dimexpr\@cornerscale\paperwidth\relax]{assets/decor_frame}}}}{}}{}}
 \newcommand{\@decortitle}{\iftoggle{corners}{%
   \vbox to\paperheight{\vfill\hbox to\paperwidth{%
     \includegraphics[width=\@cornerscale\paperwidth]{assets/decor_title}\hfill}}}{}}
@@ -370,6 +372,7 @@
 \newcommand{\backmatter}[1][]{
 \begingroup
   \themecolor{main}
+  \renewcommand{\@cornerfactor}{1.5}% larger corner triangle on the closing slide
   \begin{frame}[c]
     \centering
     \begin{minipage}{\textwidth}
@@ -390,6 +393,7 @@
 {
     \begingroup
     \themecolor{main}
+    \renewcommand{\@cornerfactor}{1.5}% larger corner triangle on ToC slides
     \begin{frame}{Table of Contents}
         \tableofcontents[currentsection]
     \end{frame}

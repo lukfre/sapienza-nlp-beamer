@@ -12,9 +12,9 @@
 
 \title{Sapienza Beamer Presentation Theme}
 \subtitle{Using \LaTeX\ to prepare slides}
-\course{Master's Degree in Computer Science}
-\author{Luca Gioffré}
-\date{}
+\course{PhD in Natural Language Processing}
+\author{Sapienza NLP Lab}
+\date{2026-11-10}
 \footertext{Sapienza Beamer Presentation Theme} % optional: omit for no footer text
 % \cornerscale{1} % optional: size of the corner triangles (default 0.7)
 
@@ -154,7 +154,7 @@ preamble} with \verb|\themecolor{white}| (default) or \verb|\themecolor{main}|
 
 \begin{frame}[fragile]{Blocks}
 \begin{columns}
-\begin{column}{0.3\textwidth}
+\begin{column}{0.4\textwidth}
 \begin{block}{Standard Blocks}
 These have a color coordinated with the footline (and grey in the blue theme)
 \begin{verbatim}
@@ -164,14 +164,15 @@ content...
 \end{verbatim}
 \end{block}
 \end{column}
-\begin{column}{0.7\textwidth}
+\begin{column}{0.5\textwidth}
 \begin{colorblock}[black]{sinteflightgreen}{Colour Blocks}
 Similar to the ones on the left, but you pick the colour. Text will be white by 
 default, but you may set it with an optional argument.
 \small
 \begin{verbatim}
-\begin{colorblock}[black]{sinteflightgreen}{title}
-content...
+\begin{colorblock}[black]
+{sinteflightgreen}{title}
+    content...
 \end{colorblock}
 \end{verbatim}
 \end{colorblock}
@@ -210,12 +211,12 @@ The ``official'' colours of colour blocks are: \testcolor{sinteflilla},
 
 \begin{frame}[fragile]{Adding images}
 \begin{columns}
-\begin{column}{0.7\textwidth}
+\begin{column}{0.6\textwidth}
 Adding images works like in normal \LaTeX:
 \begin{block}{Code for Adding Images}
 \begin{verbatim}
 \usepackage{graphicx}
-% ...
+    % ...
 \includegraphics[width=\textwidth]
 {assets/logo_RGB}
 \end{verbatim}
@@ -254,7 +255,7 @@ And this the second
 \end{block}
 \end{frame}
 
-\begin{chapter}[assets/background_negative]{}{Special Slides}
+\begin{chapter}[assets/background_alternative]{}{Special Slides}
 \begin{itemize}
 \item Chapter slides
 \item Side-picture slides
