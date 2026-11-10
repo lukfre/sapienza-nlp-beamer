@@ -1,0 +1,4 @@
+The icons in this folder are from Font Awesome Free 6.7.2 by Fonticons, Inc.
+(https://fontawesome.com), recoloured and converted to PDF.
+Icons: CC BY 4.0 License (https://creativecommons.org/licenses/by/4.0/).
+Full license: https://fontawesome.com/license/free

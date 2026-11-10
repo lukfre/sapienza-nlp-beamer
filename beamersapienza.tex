@@ -2,6 +2,18 @@
 \usepackage{amsfonts,amsmath,oldgerm}
 \usetheme{sintef} % options: nocorners, nopicturecorners, noslidenumber
 
+\usetikzlibrary{positioning,arrows.meta,fit,backgrounds} % for the diagrams section
+% "visible on=<2->": the element takes its space on every slide but is shown
+% only from slide 2, so the diagram does not shift while it is revealed.
+% (for pictures inside a node, use {\visible<2->{\includegraphics...}} instead,
+%  with the extra braces)
+\tikzset{
+  invisible/.style={opacity=0, text opacity=0},
+  visible on/.style={alt={#1{}{invisible}}},
+  alt/.code args={<#1>#2#3}{\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}}},
+}
+
+
 \newcommand{\testcolor}[1]{\colorbox{#1}{\textcolor{#1}{test}}~\texttt{#1}}
 
 \usefonttheme[onlymath]{serif}
@@ -327,6 +339,100 @@ them)}}
       \end{itemize}
 \end{itemize}
 \end{frame}
+
+\section{Diagrams}
+
+\begin{frame}{Pipelines with Icons}
+\centering
+\begin{tikzpicture}[
+    icon/.style={inner sep=0pt},
+    lbl/.style={align=center, font=\small, text width=2.2cm},
+    flow/.style={-{Stealth[length=3mm]}, line width=1.2pt, subtitlegray},
+    node distance=1.8cm]
+  \node[icon] (data) {\includegraphics[width=1cm]{assets/icons/database}};
+  \node[lbl, below=2mm of data] {Raw data};
+  \node[icon, right=of data] (model) {\includegraphics[width=1cm]{assets/icons/robot}};
+  \node[lbl, below=2mm of model] {Model};
+  \node[icon, right=of model] (out) {\includegraphics[width=1cm]{assets/icons/filter}};
+  \node[lbl, below=2mm of out] {Refined data};
+  \draw[flow] (data) -- (model);
+  \draw[flow] (model) -- (out);
+\end{tikzpicture}
+
+\vspace{\baselineskip}
+\raggedright
+Icons are small pictures placed in Ti\emph{k}Z nodes, connected by arrows.
+They can be PDF/PNG files (e.g.\ from \hrefcol{https://www.flaticon.com}{Flaticon})
+or glyphs of an icon font such as \texttt{fontawesome5}.
+\end{frame}
+
+\begin{frame}[fragile]{Pipelines with Icons}
+\framesubtitle{The code}
+\begin{block}{Basic pipeline}
+\footnotesize
+\begin{verbatim}
+% preamble: \usetikzlibrary{positioning,arrows.meta}
+\begin{tikzpicture}[node distance=1.8cm,
+    flow/.style={-{Stealth}, line width=1.2pt, subtitlegray}]
+  \node (data) {\includegraphics[width=1cm]{assets/icons/database}};
+  \node[below=2mm of data] {Raw data};
+  \node[right=of data] (model) {\includegraphics[width=1cm]{assets/icons/robot}};
+  \node[below=2mm of model] {Model};
+  \draw[flow] (data) -- (model);
+\end{tikzpicture}
+\end{verbatim}
+\end{block}
+With an icon font: \verb|\usepackage{fontawesome5}| and
+\verb|\node[text=maincolor,font=\Huge] (data) {\faDatabase};|
+\end{frame}
+
+\begin{frame}{A More Elaborated Pipeline}
+\framesubtitle{Revealed step by step}
+\centering
+\begin{tikzpicture}[
+    icon/.style={inner sep=0pt},
+    lbl/.style={align=center, font=\scriptsize, text width=1.6cm},
+    flow/.style={-{Stealth[length=2.5mm]}, line width=1pt, subtitlegray},
+    note/.style={font=\scriptsize, text=subtitlegray},
+    node distance=1.25cm]
+  % 1: raw data
+  \node[icon] (raw) {\includegraphics[width=0.85cm]{assets/icons/database}};
+  \node[lbl, below=1.5mm of raw] (rawl) {Raw data};
+  % 2: automatic stage
+  \node[icon, right=of raw] (clean) {{\visible<2->{\includegraphics[width=0.85cm]{assets/icons/broom}}}};
+  \node[visible on=<2->, lbl, below=1.5mm of clean] (cleanl) {Cleaning};
+  \node[icon, right=of clean] (model) {{\visible<2->{\includegraphics[width=0.85cm]{assets/icons/robot}}}};
+  \node[visible on=<2->, lbl, below=1.5mm of model] (modell) {LLM judge};
+  \node[icon, right=of model] (filt) {{\visible<2->{\includegraphics[width=0.85cm]{assets/icons/filter}}}};
+  \node[visible on=<2->, lbl, below=1.5mm of filt] (filtl) {Filtering};
+  \draw[visible on=<2->, flow] (raw) -- (clean);
+  \draw[visible on=<2->, flow] (clean) -- (model);
+  \draw[visible on=<2->, flow] (model) -- node[above, note] {scores} (filt);
+  \begin{scope}[on background layer]
+    \node[visible on=<2->, draw=maincolor, dashed, rounded corners, inner sep=6pt,
+          fit=(clean) (cleanl) (filt) (filtl),
+          label={[note, text=maincolor, visible on=<2->]above:Automatic stage}] (auto) {};
+  \end{scope}
+  % 3: human check, with a loop back to the model
+  \node[icon, right=of filt] (human) {{\visible<3->{\includegraphics[width=0.85cm]{assets/icons/user}}}};
+  \node[visible on=<3->, lbl, below=1.5mm of human] (humanl) {Human check};
+  \draw[visible on=<3->, flow] (filt) -- (human);
+  \draw[visible on=<3->, flow, dashed] (humanl.south) -- ++(0,-0.75cm)
+    -| node[pos=0.25, below, note] {disagreements: refine the prompt} (modell.south);
+  % 4: final dataset
+  \node[icon, above=1.1cm of human] (final) {{\visible<4->{\includegraphics[width=0.85cm]{assets/icons/check}}}};
+  \node[visible on=<4->, lbl, right=1.5mm of final, text width=1.4cm, align=left] {Final dataset};
+  \draw[visible on=<4->, flow] (human) -- (final);
+\end{tikzpicture}
+
+\vspace{\baselineskip}
+\raggedright\small
+\only<1>{Parts are revealed at each click with overlay specifications (\texttt{visible on=<2->}, see the preamble).}%
+\only<2>{\texttt{fit} draws a box around a group; \texttt{on background layer} keeps it behind the icons.}%
+\only<3>{\texttt{|-} and \texttt{-|} draw right-angled paths, here for a feedback loop.}%
+\only<4>{See the source of this slide in \texttt{beamersapienza.tex}.}
+\end{frame}
+
 
 \section{Summary}
 
