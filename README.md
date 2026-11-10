@@ -1,6 +1,6 @@
 # Sapienza NLP Beamer Presentation Template
 
-This is an **unofficial** template to create slides with LaTeX beamer for Sapienza University of Rome, restyled after the Sapienza NLP slide layout.
+This is a Latex template to create slides with LaTeX beamer for Sapienza University of Rome, restyled after the Sapienza NLP slide layout.
 
 It is a fork of [sapienza-beamer-template](https://github.com/andrea-gasparini/sapienza-beamer-template) by Andrea Gasparini. The original template is available on Overleaf Gallery and can be used directly by clicking on "Open as Template" from [here](https://www.overleaf.com/latex/templates/sapienza-presentation/yyksmrskffhk).
 
